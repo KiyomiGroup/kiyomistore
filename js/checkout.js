@@ -3,7 +3,7 @@
 // ===========================
 
 // TODO: Replace with your Paystack public key
-const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_KEY_HERE';
+const PAYSTACK_PUBLIC_KEY = 'pk_test_3fbe60983209e114473e736ac2b369be025b7bc3';
 const WLK_WHATSAPP = '447424985544';
 
 let selectedPayment = 'paystack';
