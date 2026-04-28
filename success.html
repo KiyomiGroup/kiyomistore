@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Confirmed — WLK</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <header class="checkout-header">
+    <div class="checkout-header__logo">WLK.</div>
+  </header>
+
+  <div class="success-page">
+    <div class="success-icon">🌿</div>
+    <h2>Order Received!</h2>
+    <p id="successMsg">Thank you for your order. We'll be in touch shortly to confirm delivery.</p>
+    <div class="success-order-id" id="successOrderId">Loading...</div>
+    <p style="font-size:12px;color:#999">Keep this Order ID for your records</p>
+
+    <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;width:100%;max-width:300px">
+      <a href="https://wa.me/447424985544" target="_blank"
+        style="display:block;background:#25D366;color:#fff;text-align:center;padding:14px 24px;border-radius:2px;font-size:13px;font-weight:500;letter-spacing:0.05em">
+        💬 Chat with Us on WhatsApp
+      </a>
+      <a href="index.html"
+        style="display:block;background:#0a0a0a;color:#fff;text-align:center;padding:14px 24px;border-radius:2px;font-size:13px;font-weight:500;letter-spacing:0.05em">
+        ← Back to Store
+      </a>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const method = params.get('method');
+    const orderId = params.get('order') || sessionStorage.getItem('wlk_last_order') || '—';
+
+    document.getElementById('successOrderId').textContent = orderId;
+
+    if (method === 'whatsapp') {
+      document.getElementById('successMsg').textContent =
+        'Your order summary has been sent to WhatsApp. We\'ll confirm and arrange delivery soon.';
+    } else if (method === 'paystack') {
+      document.getElementById('successMsg').textContent =
+        'Payment confirmed! Your delivery confirmation has been sent to our team on WhatsApp.';
+    }
+  </script>
+</body>
+</html>

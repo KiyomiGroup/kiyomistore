@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Delivery Zone — WLK</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body class="delivery-page">
+
+  <header class="checkout-header">
+    <div class="checkout-header__logo">WLK.</div>
+    <h2>Delivery</h2>
+  </header>
+
+  <div class="delivery-zones">
+
+    <div style="text-align:center;padding:16px 0 8px">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;margin-bottom:8px">
+        Payment confirmed ✓
+      </p>
+      <p style="font-size:13px;color:#666">Now select your Lagos delivery zone</p>
+    </div>
+
+    <div class="delivery-note">
+      ⚡ Delivery prices are estimates — final cost may vary slightly based on traffic, street access, and logistics conditions. We'll confirm before dispatch.
+    </div>
+
+    <div class="delivery-zone-card" id="zone-a" onclick="selectZone('A', '₦3,000 – ₦4,000', 'Isheri / Ojodu / Berger / Ikeja axis')">
+      <h4>Zone A</h4>
+      <div class="zone-price">₦3,000 – ₦4,000</div>
+      <div class="zone-areas">Isheri, Ojodu, Berger, Ikeja axis and nearby areas</div>
+    </div>
+
+    <div class="delivery-zone-card" id="zone-b" onclick="selectZone('B', '₦4,000 – ₦6,000', 'Surulere / Yaba / Lekki Phase 1')">
+      <h4>Zone B</h4>
+      <div class="zone-price">₦4,000 – ₦6,000</div>
+      <div class="zone-areas">Surulere, Yaba, Lekki Phase 1 and nearby areas</div>
+    </div>
+
+    <div class="delivery-zone-card" id="zone-c" onclick="selectZone('C', '₦6,000+', 'Ajah / Sangotedo / Epe')">
+      <h4>Zone C</h4>
+      <div class="zone-price">₦6,000+</div>
+      <div class="zone-areas">Ajah, Sangotedo, Epe and far areas</div>
+    </div>
+
+    <button class="checkout-submit" id="zoneSubmitBtn" onclick="confirmDelivery()" disabled style="opacity:0.5">
+      Confirm & Send to WhatsApp →
+    </button>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/delivery.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — WLK</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+</head>
+<body class="checkout-page">
+
+  <header class="checkout-header">
+    <button class="checkout-header__back" onclick="history.back()">←</button>
+    <div class="checkout-header__logo">WLK.</div>
+    <h2>Checkout</h2>
+  </header>
+
+  <div class="checkout-body">
+
+    <!-- ORDER SUMMARY -->
+    <div class="checkout-section">
+      <h3>Order Summary</h3>
+      <div id="checkoutOrderItems">
+        <p style="color:#999;font-size:13px">Loading...</p>
+      </div>
+    </div>
+
+    <!-- CUSTOMER DETAILS -->
+    <div class="checkout-section">
+      <h3>Your Details</h3>
+      <div class="form-group">
+        <label>Full Name *</label>
+        <input type="text" id="custName" placeholder="e.g. Amara Johnson" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>WhatsApp / Phone *</label>
+        <input type="tel" id="custPhone" placeholder="e.g. 08100000000" autocomplete="tel">
+      </div>
+      <div class="form-group">
+        <label>Delivery Address *</label>
+        <textarea id="custAddress" placeholder="Street, area, city..."></textarea>
+      </div>
+    </div>
+
+    <!-- PAYMENT METHOD -->
+    <div class="checkout-section">
+      <h3>Payment Method</h3>
+      <div class="payment-options">
+
+        <label class="payment-option selected" id="optPaystack" onclick="selectPayment('paystack')">
+          <input type="radio" name="payment" value="paystack" checked>
+          <span class="payment-option__icon">💳</span>
+          <div class="payment-option__info">
+            <div class="payment-option__name">Pay with Paystack</div>
+            <div class="payment-option__desc">Card, bank transfer, USSD</div>
+          </div>
+          <div class="payment-option__check">✓</div>
+        </label>
+
+        <label class="payment-option" id="optWhatsapp" onclick="selectPayment('whatsapp')">
+          <input type="radio" name="payment" value="whatsapp">
+          <span class="payment-option__icon">💬</span>
+          <div class="payment-option__info">
+            <div class="payment-option__name">Order via WhatsApp</div>
+            <div class="payment-option__desc">Send order directly to us</div>
+          </div>
+          <div class="payment-option__check"></div>
+        </label>
+
+      </div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button class="checkout-submit" id="submitBtn" onclick="handleCheckout()">
+      Complete Order →
+    </button>
+
+    <p style="font-size:11px;color:#999;text-align:center;line-height:1.6">
+      By placing an order you agree to our terms.<br>
+      NAFDAC REG: A7-102339L
+    </p>
+
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WLK — Weight Loss by Kiyomi</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- STICKY CART BAR -->
+  <div class="cart-bar" id="cartBar">
+    <span class="cart-bar__label">Your Order</span>
+    <div class="cart-bar__right">
+      <span class="cart-bar__count" id="cartCount">0 items</span>
+      <button class="cart-bar__btn" onclick="openCart()">View Cart →</button>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header__logo">WLK.</div>
+    <div class="header__sub">Weight Loss by Kiyomi</div>
+    <button class="header__cart" onclick="openCart()">
+      <span class="cart-icon">🛒</span>
+      <span class="cart-badge" id="headerCartBadge">0</span>
+    </button>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero__img-wrap">
+      <img src="images/hero-main-1.jpg" alt="WLK Products" class="hero__img">
+      <div class="hero__overlay"></div>
+    </div>
+    <div class="hero__content">
+      <p class="hero__eyebrow">100% Herbal · Originated from Ghana</p>
+      <h1 class="hero__title">Detox.<br>Reset.<br>Transform.</h1>
+      <p class="hero__sub">Powered by Avocado Seed, Caralluma Fimbriata & Garcinia Cambocila</p>
+      <a href="#products" class="hero__cta">Shop Now</a>
+    </div>
+  </section>
+
+  <!-- QUICK PITCH -->
+  <section class="pitch">
+    <div class="pitch__item">
+      <span class="pitch__icon">🌿</span>
+      <span>100% Natural</span>
+    </div>
+    <div class="pitch__item">
+      <span class="pitch__icon">🔥</span>
+      <span>Burns Fat</span>
+    </div>
+    <div class="pitch__item">
+      <span class="pitch__icon">📦</span>
+      <span>Lagos Delivery</span>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="products">
+    <h2 class="products__title">Choose Your Program</h2>
+
+    <!-- SINGLE PRODUCTS -->
+    <div class="products__group">
+      <h3 class="products__group-label">Singles</h3>
+      <div class="products__grid">
+
+        <div class="product-card" data-id="lite" data-name="WLK Lite Cleanse (350ml)" data-price="12000" data-img="images/product-lite-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-lite-1.jpg" alt="WLK Lite Cleanse" class="product-card__img">
+            <span class="product-card__badge">350ml</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Lite Cleanse</h4>
+            <p class="product-card__desc">Starter detox. Herbal drink for gentle fat burn.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦12,000</span>
+              <button class="btn-add" onclick="addToCart('lite','WLK Lite Cleanse (350ml)',12000,'images/product-lite-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="lite-plus" data-name="WLK Lite Cleanse Plus" data-price="18000" data-img="images/product-lite-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-lite-1.jpg" alt="WLK Lite Cleanse Plus" class="product-card__img">
+            <span class="product-card__badge">350ml + Detox</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Lite Cleanse Plus</h4>
+            <p class="product-card__desc">Lite Cleanse + Deep Cleanse Capsules included.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦18,000</span>
+              <button class="btn-add" onclick="addToCart('lite-plus','WLK Lite Cleanse Plus',18000,'images/product-lite-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="core" data-name="WLK Core Cleanse (500ml)" data-price="15000" data-img="images/product-core-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-core-1.jpg" alt="WLK Core Cleanse" class="product-card__img">
+            <span class="product-card__badge">500ml</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Core Cleanse</h4>
+            <p class="product-card__desc">Full strength. Maximum herbal detox power.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦15,000</span>
+              <button class="btn-add" onclick="addToCart('core','WLK Core Cleanse (500ml)',15000,'images/product-core-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card" data-id="core-plus" data-name="WLK Core Cleanse Plus" data-price="20000" data-img="images/product-core-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-core-1.jpg" alt="WLK Core Cleanse Plus" class="product-card__img">
+            <span class="product-card__badge">500ml + Detox</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Core Cleanse Plus</h4>
+            <p class="product-card__desc">Core Cleanse + Deep Cleanse Capsules combo.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦20,000</span>
+              <button class="btn-add" onclick="addToCart('core-plus','WLK Core Cleanse Plus',20000,'images/product-core-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ADD-ON -->
+    <div class="products__group">
+      <h3 class="products__group-label">Add-On</h3>
+      <div class="products__grid products__grid--single">
+        <div class="product-card product-card--addon" data-id="capsules" data-name="WLK Deep Cleanse Capsules" data-price="6000" data-img="images/product-capsule-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-capsule-1.jpg" alt="Deep Cleanse Capsules" class="product-card__img">
+            <span class="product-card__badge product-card__badge--gold">Add-On</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Deep Cleanse Capsules</h4>
+            <p class="product-card__desc">Supercharge any cleanse. Purging + nausea support.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦6,000</span>
+              <button class="btn-add" onclick="addToCart('capsules','WLK Deep Cleanse Capsules',6000,'images/product-capsule-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNDLES -->
+    <div class="products__group">
+      <h3 class="products__group-label">Bundles — Best Value</h3>
+      <div class="products__grid">
+
+        <div class="product-card product-card--bundle" data-id="balance" data-name="WLK Balance Kit" data-price="25000" data-img="images/product-bundle-1.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-bundle-1.jpg" alt="WLK Balance Kit" class="product-card__img">
+            <span class="product-card__badge product-card__badge--dark">500ml + 350ml</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Balance Kit</h4>
+            <p class="product-card__desc">1×Core Cleanse (500ml) + 1×Lite Cleanse (350ml).</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦25,000</span>
+              <button class="btn-add" onclick="addToCart('balance','WLK Balance Kit',25000,'images/product-bundle-1.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="product-card product-card--bundle" data-id="balance-plus" data-name="WLK Balance Kit Plus" data-price="30000" data-img="images/product-bundle-2.jpg">
+          <div class="product-card__img-wrap">
+            <img src="images/product-bundle-2.jpg" alt="WLK Balance Kit Plus" class="product-card__img">
+            <span class="product-card__badge product-card__badge--dark">With Detox</span>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK Balance Kit Plus</h4>
+            <p class="product-card__desc">Full bundle with Detox Capsules included.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price">₦30,000</span>
+              <button class="btn-add" onclick="addToCart('balance-plus','WLK Balance Kit Plus',30000,'images/product-bundle-2.jpg')">Add to Cart</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- FLAGSHIP -->
+    <div class="products__group">
+      <h3 class="products__group-label">Flagship Program</h3>
+      <div class="products__grid products__grid--single">
+        <div class="product-card product-card--flagship" data-id="reset" data-name="WLK 7-Day Reset Program" data-price="42000" data-img="images/product-bundle-2.jpg">
+          <div class="product-card__img-wrap product-card__img-wrap--tall">
+            <img src="images/product-bundle-2.jpg" alt="WLK 7-Day Reset" class="product-card__img">
+            <div class="product-card__flagship-overlay">
+              <span>THE FULL RESET</span>
+            </div>
+          </div>
+          <div class="product-card__body">
+            <h4 class="product-card__name">WLK 7-Day Reset Program</h4>
+            <p class="product-card__desc">Our most complete transformation. Full 7-day herbal protocol. Everything you need for a serious cleanse.</p>
+            <div class="product-card__bottom">
+              <span class="product-card__price product-card__price--flagship">₦42,000</span>
+              <button class="btn-add btn-add--flagship" onclick="addToCart('reset','WLK 7-Day Reset Program',42000,'images/product-bundle-2.jpg')">Get Started →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__logo">WLK.</div>
+    <p class="footer__sub">Weight Loss by Kiyomi</p>
+    <p class="footer__legal">NAFDAC REG NO: A7-102339L · Not suitable for pregnant women or children under 12.</p>
+    <p class="footer__contact">
+      <a href="https://wa.me/447424985544" target="_blank">WhatsApp: +44 7424 985544</a>
+      · www.kiyomistore.com
+    </p>
+  </footer>
+
+  <!-- CART DRAWER -->
+  <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <div class="cart-drawer__header">
+      <h3>Your Cart</h3>
+      <button class="cart-drawer__close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-drawer__items" id="cartItems">
+      <p class="cart-drawer__empty">Your cart is empty.</p>
+    </div>
+    <div class="cart-drawer__footer">
+      <div class="cart-drawer__total">
+        <span>Total</span>
+        <span id="cartTotal">₦0</span>
+      </div>
+      <button class="cart-drawer__checkout" onclick="goToCheckout()">Proceed to Checkout →</button>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/cart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
