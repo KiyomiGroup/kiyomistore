@@ -16,38 +16,37 @@
     <h2>Delivery</h2>
   </header>
 
-  <div class="delivery-zones">
+  <div class="delivery-body">
 
-    <div style="text-align:center;padding:16px 0 8px">
-      <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;margin-bottom:8px">
-        Payment confirmed ✓
-      </p>
-      <p style="font-size:13px;color:#666">Now select your Lagos delivery zone</p>
+    <div class="delivery-section">
+      <p style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;margin-bottom:8px;color:#111110;">Payment confirmed ✓</p>
+      <p style="font-size:13px;color:#888;">Select your Lagos delivery zone below.</p>
     </div>
 
-    <div class="delivery-note">
-      ⚡ Delivery prices are estimates — final cost may vary slightly based on traffic, street access, and logistics conditions. We'll confirm before dispatch.
+    <div class="delivery-section" style="background:#f0ece3;border-radius:8px;">
+      <p style="font-size:12px;color:#888;line-height:1.7;">⚡ Delivery prices are estimates — final cost may vary slightly based on traffic, street access, and logistics. We'll confirm before dispatch.</p>
     </div>
 
-    <div class="delivery-zone-card" id="zone-a" onclick="selectZone('A', '₦3,000 – ₦4,000', 'Isheri / Ojodu / Berger / Ikeja axis')">
-      <h4>Zone A</h4>
-      <div class="zone-price">₦3,000 – ₦4,000</div>
-      <div class="zone-areas">Isheri, Ojodu, Berger, Ikeja axis and nearby areas</div>
+    <div class="delivery-section">
+      <h3>Choose Your Zone</h3>
+
+      <div class="delivery-zone" id="zone-a" onclick="selectZone('A', '₦3,000 – ₦4,000', 'Isheri / Ojodu / Berger / Ikeja axis')">
+        <div class="delivery-zone__name">Zone A — ₦3,000 – ₦4,000</div>
+        <div class="delivery-zone__price">Isheri, Ojodu, Berger, Ikeja axis and nearby areas</div>
+      </div>
+
+      <div class="delivery-zone" id="zone-b" onclick="selectZone('B', '₦4,000 – ₦6,000', 'Surulere / Yaba / Lekki Phase 1')">
+        <div class="delivery-zone__name">Zone B — ₦4,000 – ₦6,000</div>
+        <div class="delivery-zone__price">Surulere, Yaba, Lekki Phase 1 and nearby areas</div>
+      </div>
+
+      <div class="delivery-zone" id="zone-c" onclick="selectZone('C', '₦6,000+', 'Ajah / Sangotedo / Epe')">
+        <div class="delivery-zone__name">Zone C — ₦6,000+</div>
+        <div class="delivery-zone__price">Ajah, Sangotedo, Epe and far areas</div>
+      </div>
     </div>
 
-    <div class="delivery-zone-card" id="zone-b" onclick="selectZone('B', '₦4,000 – ₦6,000', 'Surulere / Yaba / Lekki Phase 1')">
-      <h4>Zone B</h4>
-      <div class="zone-price">₦4,000 – ₦6,000</div>
-      <div class="zone-areas">Surulere, Yaba, Lekki Phase 1 and nearby areas</div>
-    </div>
-
-    <div class="delivery-zone-card" id="zone-c" onclick="selectZone('C', '₦6,000+', 'Ajah / Sangotedo / Epe')">
-      <h4>Zone C</h4>
-      <div class="zone-price">₦6,000+</div>
-      <div class="zone-areas">Ajah, Sangotedo, Epe and far areas</div>
-    </div>
-
-    <button class="checkout-submit" id="zoneSubmitBtn" onclick="confirmDelivery()" disabled style="opacity:0.5">
+    <button class="delivery-submit" id="zoneSubmitBtn" onclick="confirmDelivery()" disabled style="opacity:0.5;">
       Confirm & Send to WhatsApp →
     </button>
 
