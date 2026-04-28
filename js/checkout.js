@@ -57,15 +57,18 @@ function renderOrderSummary() {
 
 function getFormData() {
   const name = document.getElementById('custName').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
   const address = document.getElementById('custAddress').value.trim();
-  return { name, phone, address };
+  return { name, email, phone, address };
 }
 
 function validateForm(data) {
   if (!data.name) { showToast('Please enter your name'); return false; }
-  if (!data.phone) { showToast('Please enter your phone'); return false; }
-  if (!data.address) { showToast('Please enter your address'); return false; }
+  if (!data.email) { showToast('Please enter your email address'); return false; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) { showToast('Please enter a valid email address'); return false; }
+  if (!data.phone) { showToast('Please enter your phone number'); return false; }
+  if (!data.address) { showToast('Please enter your delivery address'); return false; }
   return true;
 }
 
@@ -88,15 +91,16 @@ async function handleWhatsAppCheckout(customerData) {
 
   // Save to Supabase (best effort)
   await WLKSupabase.saveOrder({
-    order_id: orderId,
-    products: cart,
-    total_price: total,
-    payment_method: 'WhatsApp',
-    status: 'pending',
-    customer_name: customerData.name,
-    customer_phone: customerData.phone,
-    delivery_address: customerData.address
-  });
+      order_id: orderId,
+      products: cart,
+      total_price: total,
+      payment_method: 'WhatsApp',
+      status: 'pending',
+      customer_name: customerData.name,
+      customer_email: customerData.email,
+      customer_phone: customerData.phone,
+      delivery_address: customerData.address
+    });
 
   const itemsList = cart.map(i => `  • ${i.name} × ${i.qty} = ${WLKCart.formatPrice(i.price * i.qty)}`).join('\n');
 
@@ -129,12 +133,12 @@ function handlePaystackCheckout(customerData) {
   const total = WLKCart.getTotal();
   const cart = WLKCart.getCart();
   const orderId = generateOrderId();
-  const email = customerData.phone + '@wlk.order'; // fallback email since we don't collect it
+  const email = customerData.email || (customerData.phone.replace(/\s/g,'') + '@wlk.order');
 
   const handler = PaystackPop.setup({
     key: PAYSTACK_PUBLIC_KEY,
     email: email,
-    amount: total * 100, // Paystack uses kobo
+    amount: total * 100, // Paystack uses kobo (NGN smallest unit)
     currency: 'NGN',
     ref: orderId,
     metadata: {
@@ -190,6 +194,15 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
 }
 
+function dismissLoginBanner() {
+  const banner = document.getElementById('loginSuggestionBanner');
+  if (banner) {
+    banner.style.opacity = '0';
+    banner.style.transform = 'translateY(-10px)';
+    setTimeout(() => banner.style.display = 'none', 300);
+  }
+}
+
 // Init
 document.addEventListener('DOMContentLoaded', () => {
   if (WLKCart.getCount() === 0) {
@@ -200,4 +213,16 @@ document.addEventListener('DOMContentLoaded', () => {
     return;
   }
   renderOrderSummary();
+
+  // Show login suggestion banner after a short delay
+  setTimeout(() => {
+    const banner = document.getElementById('loginSuggestionBanner');
+    if (banner) {
+      banner.style.display = 'block';
+      setTimeout(() => {
+        banner.style.opacity = '1';
+        banner.style.transform = 'translateY(0)';
+      }, 50);
+    }
+  }, 500);
 });

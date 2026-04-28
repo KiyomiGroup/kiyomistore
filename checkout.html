@@ -28,12 +28,29 @@
       </div>
     </div>
 
+    <!-- LOGIN SUGGESTION BANNER -->
+    <div class="login-suggestion-banner" id="loginSuggestionBanner">
+      <div class="login-suggestion-banner__icon">🔒</div>
+      <div class="login-suggestion-banner__text">
+        <strong>Save your order history</strong>
+        <span>Create an account or log in to track purchases and get faster checkout next time.</span>
+      </div>
+      <div class="login-suggestion-banner__actions">
+        <button class="login-suggestion-banner__btn login-suggestion-banner__btn--primary" onclick="dismissLoginBanner()">Log In / Sign Up</button>
+        <button class="login-suggestion-banner__btn login-suggestion-banner__btn--ghost" onclick="dismissLoginBanner()">Continue as Guest</button>
+      </div>
+    </div>
+
     <!-- CUSTOMER DETAILS -->
     <div class="checkout-section">
       <h3>Your Details</h3>
       <div class="form-group">
         <label>Full Name *</label>
         <input type="text" id="custName" placeholder="e.g. Amara Johnson" autocomplete="name">
+      </div>
+      <div class="form-group">
+        <label>Email Address *</label>
+        <input type="email" id="custEmail" placeholder="e.g. amara@email.com" autocomplete="email">
       </div>
       <div class="form-group">
         <label>WhatsApp / Phone *</label>

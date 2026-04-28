@@ -827,3 +827,89 @@ button { cursor: pointer; border: none; font-family: var(--font-body); }
   .products__grid { grid-template-columns: 1fr 1fr; gap: 16px; }
   .checkout-body, .delivery-zones { padding: 24px 20px; }
 }
+
+/* ===========================
+   LOGIN SUGGESTION BANNER
+   =========================== */
+.login-suggestion-banner {
+  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2415 100%);
+  border: 1px solid #c9a84c44;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 20px rgba(201,168,76,0.15);
+}
+
+.login-suggestion-banner__icon {
+  font-size: 22px;
+  margin-bottom: 8px;
+}
+
+.login-suggestion-banner__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.login-suggestion-banner__text strong {
+  color: #c9a84c;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.login-suggestion-banner__text span {
+  color: #bbb;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.login-suggestion-banner__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.login-suggestion-banner__btn {
+  flex: 1;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.login-suggestion-banner__btn--primary {
+  background: #c9a84c;
+  color: #1a1a1a;
+}
+
+.login-suggestion-banner__btn--primary:hover {
+  background: #e0bf6e;
+}
+
+.login-suggestion-banner__btn--ghost {
+  background: transparent;
+  color: #888;
+  border: 1px solid #333;
+}
+
+.login-suggestion-banner__btn--ghost:hover {
+  color: #aaa;
+  border-color: #555;
+}
+
+/* ===========================
+   HERO IMAGE FIX — OBJECT POSITION
+   =========================== */
+.hero__img {
+  object-position: center center;
+}
+
