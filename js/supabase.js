@@ -2,8 +2,8 @@
 // WLK Supabase Integration
 // ===========================
 // TODO: Replace with your actual Supabase URL and anon key
-const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const SUPABASE_URL = 'https://kulibehbzfsexgigvdyd.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1bGliZWhiemZzZXhnaWd2ZHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNDk3MzMsImV4cCI6MjA5MjkyNTczM30.sOjEoCyIwlRsCjk2x6FenAwH4P7iR1Kqo6-p0L3lir0';
 
 const WLKSupabase = (() => {
 
