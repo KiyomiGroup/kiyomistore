@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#080808">
   <title>WLK — Weight Loss by Kiyomi</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +16,9 @@
 
   <!-- ── HEADER ── -->
   <header class="header">
-    <div class="header__logo">WLK.</div>
+    <div class="header__logo">
+      <img src="images/wlk-logo.png" alt="WLK" class="header__logo-img">
+    </div>
     <div class="header__sub">Weight Loss by Kiyomi</div>
     <button class="header__cart" onclick="openCart()" aria-label="Open cart">
       <span aria-hidden="true">🛒</span>
@@ -67,6 +71,8 @@
       <div class="product-group__header reveal">
         <p class="section-label">Singles</p>
       </div>
+
+      <div class="products-grid-2">
 
       <!-- 1 · Lite Cleanse 350ml -->
       <article class="product-block reveal" aria-label="WLK Lite Cleanse">
@@ -131,6 +137,8 @@
           <button class="btn-add" onclick="addToCart('core-plus','WLK Core Cleanse Plus',20000,'images/product-core-plus-1.jpg')">Add to Cart</button>
         </div>
       </article>
+
+      </div><!-- /products-grid-2 -->
 
     </div><!-- /singles -->
 

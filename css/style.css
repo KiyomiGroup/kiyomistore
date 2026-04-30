@@ -71,12 +71,18 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   -webkit-backdrop-filter: blur(12px);
 }
 .header__logo {
-  font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 400;
-  color: var(--gold);
-  letter-spacing: 0.01em;
-  line-height: 1;
+  display: flex;
+  align-items: center;
+  height: 36px;
+  flex-shrink: 0;
+}
+.header__logo-img {
+  height: 34px;
+  width: auto;
+  display: block;
+  /* Logo is black on black bg — invert to show white */
+  filter: invert(1);
+  object-fit: contain;
 }
 .header__sub {
   position: absolute;
@@ -754,8 +760,16 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   display: flex; align-items: center; justify-content: center;
 }
 .checkout-header__logo {
-  font-family: var(--font-display);
-  font-size: 24px; font-weight: 400; color: var(--gold);
+  display: flex;
+  align-items: center;
+  height: 32px;
+}
+.checkout-header__logo-img {
+  height: 28px;
+  width: auto;
+  display: block;
+  filter: invert(1);
+  object-fit: contain;
 }
 .checkout-header h2 {
   font-family: var(--font-display); font-size: 15px;
