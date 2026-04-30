@@ -4,7 +4,7 @@
 
 // ⚠️ REPLACE THIS WITH YOUR LIVE PAYSTACK KEY from dashboard.paystack.com
 // Test keys (pk_test_...) only work on localhost — use pk_live_... for your live site
-const PAYSTACK_PUBLIC_KEY = 'pk_test_3fbe60983209e114473e736ac2b369be025b7bc3';
+const PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
 const WLK_WHATSAPP = '447424985544';
 
 let selectedPayment = 'paystack';
