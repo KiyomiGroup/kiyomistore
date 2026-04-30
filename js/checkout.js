@@ -1,10 +1,10 @@
 // ===========================
-// WLK Checkout Logic — Sprint 2
-// BUG FIX: Paystack load guard + retry
+// WLK Checkout Logic
 // ===========================
 
-// ⚠️ REPLACE with your pk_live_... key from dashboard.paystack.com
-const PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
+// ⚠️ REPLACE THIS WITH YOUR LIVE PAYSTACK KEY from dashboard.paystack.com
+// Test keys (pk_test_...) only work on localhost — use pk_live_... for your live site
+const PAYSTACK_PUBLIC_KEY = 'pk_test_3fbe60983209e114473e736ac2b369be025b7bc3';
 const WLK_WHATSAPP = '447424985544';
 
 let selectedPayment = 'paystack';
@@ -19,8 +19,10 @@ function selectPayment(method) {
   const btn = document.getElementById('submitBtn');
   if (method === 'whatsapp') {
     btn.textContent = 'Order via WhatsApp →';
+    btn.classList.add('checkout-submit--gold');
   } else {
     btn.textContent = 'Pay with Paystack →';
+    btn.classList.remove('checkout-submit--gold');
   }
 }
 
@@ -34,7 +36,7 @@ function renderOrderSummary() {
   if (!el) return;
 
   if (cart.length === 0) {
-    el.innerHTML = '<p style="color:#999;font-size:13px">No items. <a href="index.html" style="color:#b8973e;text-decoration:underline">Go back</a></p>';
+    el.innerHTML = '<p style="color:#999;font-size:13px">No items. <a href="index.html" style="color:#c9a84c;text-decoration:underline">Go back</a></p>';
     return;
   }
 
@@ -55,12 +57,11 @@ function renderOrderSummary() {
 }
 
 function getFormData() {
-  return {
-    name: document.getElementById('custName').value.trim(),
-    email: document.getElementById('custEmail').value.trim(),
-    phone: document.getElementById('custPhone').value.trim(),
-    address: document.getElementById('custAddress').value.trim()
-  };
+  const name = document.getElementById('custName').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const address = document.getElementById('custAddress').value.trim();
+  return { name, email, phone, address };
 }
 
 function validateForm(data) {
@@ -90,11 +91,11 @@ async function handleCheckout() {
     handlePaystackCheckout(data);
   }
 
-  // Re-enable after Paystack opens popup
+  // Re-enable button after a moment (Paystack opens popup)
   setTimeout(() => {
     btn.disabled = false;
-    btn.textContent = selectedPayment === 'whatsapp' ? 'Order via WhatsApp →' : 'Pay with Paystack →';
-  }, 2500);
+    btn.textContent = 'Pay with Paystack →';
+  }, 2000);
 }
 
 // ===== WHATSAPP FLOW =====
@@ -116,6 +117,7 @@ async function handleWhatsAppCheckout(customerData) {
   });
 
   const itemsList = cart.map(i => `  • ${i.name} × ${i.qty} = ${WLKCart.formatPrice(i.price * i.qty)}`).join('\n');
+
   const msg = `*WLK ORDER — ${orderId}*\n\nHello! I'd like to place an order:\n\n${itemsList}\n\n*TOTAL: ${WLKCart.formatPrice(total)}*\n\n*Customer Details:*\nName: ${customerData.name}\nEmail: ${customerData.email}\nPhone: ${customerData.phone}\nAddress: ${customerData.address}\n\nPlease confirm availability and delivery cost. Thank you! 🌿`;
 
   const encoded = encodeURIComponent(msg);
@@ -127,43 +129,25 @@ async function handleWhatsAppCheckout(customerData) {
 }
 
 // ===== PAYSTACK FLOW =====
-// FIX: Wait for PaystackPop to be available (script may still be loading)
-function waitForPaystack(timeout) {
-  return new Promise((resolve, reject) => {
-    if (typeof PaystackPop !== 'undefined') { resolve(); return; }
-    const start = Date.now();
-    const check = setInterval(() => {
-      if (typeof PaystackPop !== 'undefined') {
-        clearInterval(check);
-        resolve();
-      } else if (Date.now() - start > timeout) {
-        clearInterval(check);
-        reject(new Error('Paystack script timed out'));
-      }
-    }, 100);
-  });
-}
-
-async function handlePaystackCheckout(customerData) {
-  try {
-    await waitForPaystack(6000); // wait up to 6s for Paystack script
-  } catch (e) {
+function handlePaystackCheckout(customerData) {
+  // Check Paystack loaded
+  if (typeof PaystackPop === 'undefined') {
     showToast('Payment service unavailable. Please use WhatsApp or refresh.');
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = false;
-    btn.textContent = 'Pay with Paystack →';
+    document.getElementById('submitBtn').disabled = false;
+    document.getElementById('submitBtn').textContent = 'Pay with Paystack →';
     return;
   }
 
   const total = WLKCart.getTotal();
   const cart = WLKCart.getCart();
   const orderId = generateOrderId();
+  const email = customerData.email;
 
   try {
     const handler = PaystackPop.setup({
       key: PAYSTACK_PUBLIC_KEY,
-      email: customerData.email,
-      amount: total * 100, // kobo
+      email: email,
+      amount: total * 100, // amount in kobo (NGN)
       currency: 'NGN',
       ref: orderId,
       metadata: {
@@ -207,7 +191,7 @@ async function handlePaystackCheckout(customerData) {
     handler.openIframe();
   } catch (err) {
     console.error('Paystack error:', err);
-    showToast('Could not open payment. Please use WhatsApp or refresh the page.');
+    showToast('Could not open payment. Check your Paystack key or use WhatsApp.');
     const btn = document.getElementById('submitBtn');
     btn.disabled = false;
     btn.textContent = 'Pay with Paystack →';
@@ -252,5 +236,10 @@ document.addEventListener('DOMContentLoaded', () => {
         banner.style.transform = 'translateY(0)';
       }, 50);
     }
-  }, 600);
+  }, 500);
+
+  // Warn if using test key on live domain
+  if (PAYSTACK_PUBLIC_KEY.startsWith('pk_test_') && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    console.warn('⚠️ WLK: You are using a Paystack TEST key on a live domain. Payments will fail. Replace PAYSTACK_PUBLIC_KEY in js/checkout.js with your pk_live_... key from dashboard.paystack.com');
+  }
 });
