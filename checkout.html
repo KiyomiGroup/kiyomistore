@@ -78,7 +78,7 @@
       <h3>Payment Method</h3>
       <div class="payment-options">
 
-        <label class="payment-option selected" id="optPaystack" onclick="selectPayment('paystack')">
+        <label class="payment-option selected" id="opt-paystack" onclick="selectPayment('paystack')">
           <input type="radio" name="payment" value="paystack" checked>
           <span class="payment-option__icon">💳</span>
           <div class="payment-option__info">
@@ -88,7 +88,7 @@
           <div class="payment-option__check">✓</div>
         </label>
 
-        <label class="payment-option" id="optWhatsapp" onclick="selectPayment('whatsapp')">
+        <label class="payment-option" id="opt-whatsapp" onclick="selectPayment('whatsapp')">
           <input type="radio" name="payment" value="whatsapp">
           <span class="payment-option__icon">💬</span>
           <div class="payment-option__info">
@@ -103,7 +103,7 @@
 
     <!-- SUBMIT -->
     <button class="checkout-submit" id="submitBtn" onclick="handleCheckout()">
-      Complete Order →
+      Pay with Paystack →
     </button>
 
     <p style="font-size:11px;color:#999;text-align:center;line-height:1.6">
@@ -115,9 +115,9 @@
 
   <div class="toast" id="toast"></div>
 
-  <script src="js/cart.js?v=4"></script>
-  <script src="js/supabase.js?v=4"></script>
-  <script src="js/checkout.js?v=4"></script>
+  <script src="js/cart.js?v=5"></script>
+  <script src="js/supabase.js?v=5"></script>
+  <script src="js/checkout.js?v=5"></script>
   <script>
     // Show notice if test key is used on a live domain
     document.addEventListener('DOMContentLoaded', function() {
