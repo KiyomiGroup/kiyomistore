@@ -81,8 +81,8 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   width: auto;
   display: block;
   object-fit: contain;
-  /* Tint white logo to gold: sepia + saturate + hue-rotate */
-  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
+  /* White logo → tint to WLK gold (#c9a84c) */
+  filter: brightness(0) invert(1) sepia(1) saturate(2.5) hue-rotate(5deg) brightness(0.88);
 }
 .header__sub {
   position: absolute;
@@ -769,7 +769,7 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   width: auto;
   display: block;
   object-fit: contain;
-  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
+  filter: brightness(0) invert(1) sepia(1) saturate(2.5) hue-rotate(5deg) brightness(0.88);
 }
 .checkout-header h2 {
   font-family: var(--font-display); font-size: 15px;

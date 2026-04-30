@@ -1,14 +1,11 @@
-// ===========================
-// WLK Checkout Logic
-// Paystack callback MUST be synchronous — no async/await inside it
-// ===========================
+// WLK Checkout — v3 (sync Paystack callback, no async near PaystackPop)
+// If you see old errors: hard-refresh with Ctrl+Shift+R or Cmd+Shift+R
 
-const PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
-const WLK_WHATSAPP = '447424985544';
+var PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
+var WLK_WHATSAPP = '447424985544';
+var selectedPayment = 'paystack';
 
-let selectedPayment = 'paystack';
-
-// ── UI helpers ──────────────────────────────────────────────
+// ─── UI ──────────────────────────────────────────────────────
 
 function selectPayment(method) {
   selectedPayment = method;
@@ -16,8 +13,7 @@ function selectPayment(method) {
   document.getElementById('optWhatsapp').classList.toggle('selected', method === 'whatsapp');
   document.getElementById('optPaystack').querySelector('.payment-option__check').textContent = method === 'paystack' ? '✓' : '';
   document.getElementById('optWhatsapp').querySelector('.payment-option__check').textContent = method === 'whatsapp' ? '✓' : '';
-
-  const btn = document.getElementById('submitBtn');
+  var btn = document.getElementById('submitBtn');
   if (method === 'whatsapp') {
     btn.textContent = 'Order via WhatsApp →';
     btn.classList.add('checkout-submit--gold');
@@ -28,53 +24,48 @@ function selectPayment(method) {
 }
 
 function resetBtn() {
-  const btn = document.getElementById('submitBtn');
+  var btn = document.getElementById('submitBtn');
   if (!btn) return;
   btn.disabled = false;
   btn.textContent = selectedPayment === 'whatsapp' ? 'Order via WhatsApp →' : 'Pay with Paystack →';
 }
 
-let toastTimer;
+var _toastTimer;
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   if (!t) return;
   t.textContent = msg;
   t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 3500);
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(function() { t.classList.remove('show'); }, 3500);
 }
 
 function generateOrderId() {
-  return 'WLK-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+  return 'WLK-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
 }
 
-// ── Order summary render ─────────────────────────────────────
+// ─── Order summary ────────────────────────────────────────────
 
 function renderOrderSummary() {
-  const cart = WLKCart.getCart();
-  const el = document.getElementById('checkoutOrderItems');
+  var cart = WLKCart.getCart();
+  var el = document.getElementById('checkoutOrderItems');
   if (!el) return;
-
   if (cart.length === 0) {
     el.innerHTML = '<p style="color:#999;font-size:13px">No items. <a href="index.html" style="color:#c9a84c;text-decoration:underline">Go back</a></p>';
     return;
   }
-
-  el.innerHTML = cart.map(item => `
-    <div class="checkout-order-item">
-      <span class="checkout-order-item__name">${item.name}</span>
-      <span class="checkout-order-item__qty">×${item.qty}</span>
-      <span class="checkout-order-item__price">${WLKCart.formatPrice(item.price * item.qty)}</span>
-    </div>
-  `).join('') + `
-    <div class="checkout-order-total">
-      <span>Total</span>
-      <span>${WLKCart.formatPrice(WLKCart.getTotal())}</span>
-    </div>
-  `;
+  var html = cart.map(function(item) {
+    return '<div class="checkout-order-item">' +
+      '<span class="checkout-order-item__name">' + item.name + '</span>' +
+      '<span class="checkout-order-item__qty">×' + item.qty + '</span>' +
+      '<span class="checkout-order-item__price">' + WLKCart.formatPrice(item.price * item.qty) + '</span>' +
+      '</div>';
+  }).join('');
+  html += '<div class="checkout-order-total"><span>Total</span><span>' + WLKCart.formatPrice(WLKCart.getTotal()) + '</span></div>';
+  el.innerHTML = html;
 }
 
-// ── Form ─────────────────────────────────────────────────────
+// ─── Form ─────────────────────────────────────────────────────
 
 function getFormData() {
   return {
@@ -87,102 +78,102 @@ function getFormData() {
 
 function validateForm(data) {
   if (!data.name)    { showToast('Please enter your name');            return false; }
-  if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))
-                     { showToast('Please enter a valid email');         return false; }
+  if (!data.email || data.email.indexOf('@') < 1) { showToast('Please enter a valid email'); return false; }
   if (!data.phone)   { showToast('Please enter your phone number');    return false; }
   if (!data.address) { showToast('Please enter your delivery address'); return false; }
   return true;
 }
 
-// ── Main entry ───────────────────────────────────────────────
+// ─── Entry point (called by button onclick) ───────────────────
 
-async function handleCheckout() {
-  const data = getFormData();
+function handleCheckout() {
+  var data = getFormData();
   if (!validateForm(data)) return;
 
-  const btn = document.getElementById('submitBtn');
+  var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Processing…';
 
   if (selectedPayment === 'whatsapp') {
-    await handleWhatsAppCheckout(data);
+    _doWhatsApp(data);
   } else {
-    handlePaystackCheckout(data);   // NOT async — Paystack opens its own popup
+    _doPaystack(data);
   }
 }
 
-// ── WhatsApp flow ────────────────────────────────────────────
+// ─── WhatsApp ─────────────────────────────────────────────────
 
-async function handleWhatsAppCheckout(customerData) {
-  const cart  = WLKCart.getCart();
-  const total = WLKCart.getTotal();
-  const orderId = generateOrderId();
+function _doWhatsApp(customerData) {
+  var cart    = WLKCart.getCart();
+  var total   = WLKCart.getTotal();
+  var orderId = generateOrderId();
 
-  // Fire-and-forget Supabase save (don't await critically)
-  WLKSupabase.saveOrder({
-    order_id: orderId, products: cart, total_price: total,
-    payment_method: 'WhatsApp', status: 'pending',
-    customer_name: customerData.name, customer_email: customerData.email,
-    customer_phone: customerData.phone, delivery_address: customerData.address
-  }).catch(console.warn);
+  // Save to Supabase (non-blocking)
+  try {
+    WLKSupabase.saveOrder({
+      order_id: orderId, products: cart, total_price: total,
+      payment_method: 'WhatsApp', status: 'pending',
+      customer_name: customerData.name, customer_email: customerData.email,
+      customer_phone: customerData.phone, delivery_address: customerData.address
+    });
+  } catch(e) { console.warn('Supabase save failed:', e); }
 
-  const lines = cart.map(i => `  • ${i.name} ×${i.qty} = ${WLKCart.formatPrice(i.price * i.qty)}`).join('\n');
-  const msg = [
-    `*WLK ORDER — ${orderId}*`,
-    '',
-    'Hello! I\'d like to place an order:',
-    '',
-    lines,
-    '',
-    `*TOTAL: ${WLKCart.formatPrice(total)}*`,
-    '',
-    '*My Details:*',
-    `Name: ${customerData.name}`,
-    `Email: ${customerData.email}`,
-    `Phone: ${customerData.phone}`,
-    `Address: ${customerData.address}`,
-    '',
-    'Please confirm availability and delivery cost. Thank you! 🌿'
-  ].join('\n');
+  var lines = cart.map(function(i) {
+    return '  \u2022 ' + i.name + ' \xd7' + i.qty + ' = ' + WLKCart.formatPrice(i.price * i.qty);
+  }).join('\n');
 
-  window.open(`https://wa.me/${WLK_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  var msg = '*WLK ORDER \u2014 ' + orderId + '*\n\n'
+    + 'Hello! I\'d like to place an order:\n\n'
+    + lines + '\n\n'
+    + '*TOTAL: ' + WLKCart.formatPrice(total) + '*\n\n'
+    + '*My Details:*\n'
+    + 'Name: ' + customerData.name + '\n'
+    + 'Email: ' + customerData.email + '\n'
+    + 'Phone: ' + customerData.phone + '\n'
+    + 'Address: ' + customerData.address + '\n\n'
+    + 'Please confirm availability and delivery cost. Thank you! \ud83c\udf3f';
 
+  window.open('https://wa.me/' + WLK_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
   sessionStorage.setItem('wlk_last_order', orderId);
   WLKCart.clearCart();
   window.location.href = 'success.html?method=whatsapp&order=' + orderId;
 }
 
-// ── Paystack flow ────────────────────────────────────────────
-// RULE: callback passed to PaystackPop.setup() MUST be a plain synchronous
-// function. No async, no await inside it. Do async work (Supabase) AFTER
-// redirect on the next page instead.
+// ─── Paystack ─────────────────────────────────────────────────
+// KEY RULES:
+//   1. callback must be a plain function() {} — NOT async, NOT arrow with await
+//   2. Do NOT call any Promise/.then inside callback
+//   3. Only use synchronous operations: sessionStorage, WLKCart.clearCart(), location.href
 
-function handlePaystackCheckout(customerData) {
+function _doPaystack(customerData) {
   if (typeof PaystackPop === 'undefined') {
-    showToast('Payment service not loaded. Please refresh and try again.');
+    showToast('Payment service not loaded. Please refresh the page.');
     resetBtn();
     return;
   }
 
-  const cart    = WLKCart.getCart();
-  const total   = WLKCart.getTotal();
-  const orderId = generateOrderId();
+  var cart    = WLKCart.getCart();
+  var total   = WLKCart.getTotal();
+  var orderId = generateOrderId();
 
-  // Persist everything to sessionStorage NOW so delivery.html can save to Supabase
+  // Store everything in sessionStorage NOW — before opening Paystack
+  // delivery.html will read this and save to Supabase after redirect
   sessionStorage.setItem('wlk_pending_order', JSON.stringify({
-    orderId,
-    cart,
-    total,
-    name:    customerData.name,
-    email:   customerData.email,
-    phone:   customerData.phone,
-    address: customerData.address
+    orderId:  orderId,
+    cart:     cart,
+    total:    total,
+    name:     customerData.name,
+    email:    customerData.email,
+    phone:    customerData.phone,
+    address:  customerData.address
   }));
 
-  const handler = PaystackPop.setup({
+  // ⚠️ PaystackPop.setup callback must be a plain synchronous function
+  // No async, no await, no .then(), no fetch() inside here
+  var handler = PaystackPop.setup({
     key:      PAYSTACK_PUBLIC_KEY,
     email:    customerData.email,
-    amount:   total * 100,   // kobo
+    amount:   total * 100,
     currency: 'NGN',
     ref:      orderId,
     label:    customerData.name,
@@ -193,17 +184,11 @@ function handlePaystackCheckout(customerData) {
         { display_name: 'Address',       variable_name: 'address',       value: customerData.address }
       ]
     },
-
-    // ✅ MUST be a plain synchronous function — no async/await
     callback: function(response) {
-      // Store the Paystack reference synchronously
       sessionStorage.setItem('wlk_paystack_ref', response.reference);
-      // Clear cart synchronously
       WLKCart.clearCart();
-      // Redirect — delivery.html will handle the Supabase save
       window.location.href = 'delivery.html?order=' + orderId;
     },
-
     onClose: function() {
       showToast('Payment cancelled. You can try again.');
       resetBtn();
@@ -213,18 +198,17 @@ function handlePaystackCheckout(customerData) {
   handler.openIframe();
 }
 
-// ── Login banner dismiss ─────────────────────────────────────
+// ─── Login banner ─────────────────────────────────────────────
 
 function dismissLoginBanner() {
-  const banner = document.getElementById('loginSuggestionBanner');
+  var banner = document.getElementById('loginSuggestionBanner');
   if (!banner) return;
-  banner.style.transition = 'opacity 0.3s, transform 0.3s';
+  banner.style.transition = 'opacity 0.3s';
   banner.style.opacity = '0';
-  banner.style.transform = 'translateY(-8px)';
-  setTimeout(() => banner.style.display = 'none', 300);
+  setTimeout(function() { banner.style.display = 'none'; }, 300);
 }
 
-// ── Init ─────────────────────────────────────────────────────
+// ─── Init ─────────────────────────────────────────────────────
 
 document.addEventListener('DOMContentLoaded', function() {
   if (WLKCart.getCount() === 0) {
@@ -233,7 +217,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   renderOrderSummary();
 
-  // Show login nudge after half a second
   setTimeout(function() {
     var banner = document.getElementById('loginSuggestionBanner');
     if (banner) {
