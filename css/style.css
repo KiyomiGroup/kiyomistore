@@ -77,12 +77,12 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   flex-shrink: 0;
 }
 .header__logo-img {
-  height: 34px;
+  height: 32px;
   width: auto;
   display: block;
-  /* Logo is black on black bg — invert to show white */
-  filter: invert(1);
   object-fit: contain;
+  /* Tint white logo to gold: sepia + saturate + hue-rotate */
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
 }
 .header__sub {
   position: absolute;
@@ -765,11 +765,11 @@ button { cursor: pointer; border: none; font-family: var(--font-body); backgroun
   height: 32px;
 }
 .checkout-header__logo-img {
-  height: 28px;
+  height: 26px;
   width: auto;
   display: block;
-  filter: invert(1);
   object-fit: contain;
+  filter: sepia(1) saturate(3) hue-rotate(5deg) brightness(0.95);
 }
 .checkout-header h2 {
   font-family: var(--font-display); font-size: 15px;
