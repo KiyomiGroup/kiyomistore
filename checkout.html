@@ -32,17 +32,10 @@
       </div>
     </div>
 
-    <!-- LOGIN SUGGESTION BANNER -->
-    <div class="login-suggestion-banner" id="loginSuggestionBanner">
-      <div class="login-suggestion-banner__icon">🔒</div>
-      <div class="login-suggestion-banner__text">
-        <strong>Save your order history</strong>
-        <span>Create an account or log in to track purchases and get faster checkout next time.</span>
-      </div>
-      <div class="login-suggestion-banner__actions">
-        <button class="login-suggestion-banner__btn login-suggestion-banner__btn--primary" onclick="dismissLoginBanner()">Log In / Sign Up</button>
-        <button class="login-suggestion-banner__btn login-suggestion-banner__btn--ghost" onclick="dismissLoginBanner()">Continue as Guest</button>
-      </div>
+    <!-- PAST ORDERS (shown only if customer has ordered before) -->
+    <div class="checkout-section" id="pastOrdersSection" style="display:none;">
+      <h3>Your Previous Orders</h3>
+      <div id="pastOrdersList"></div>
     </div>
 
     <!-- CUSTOMER DETAILS -->

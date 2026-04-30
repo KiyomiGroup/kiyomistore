@@ -119,6 +119,9 @@ function _doWhatsApp(data) {
   var total   = WLKCart.getTotal();
   var orderId = generateOrderId();
 
+  saveCustomerDetails(data);
+  saveOrderToHistory(orderId, cart, total, data, 'WhatsApp');
+
   try {
     WLKSupabase.saveOrder({
       order_id: orderId, products: cart, total_price: total,
@@ -152,6 +155,9 @@ function _doPaystack(data) {
   var total       = WLKCart.getTotal();
   var orderId     = generateOrderId();
   var callbackUrl = window.location.origin + '/delivery.html?order=' + orderId;
+
+  saveCustomerDetails(data);
+  saveOrderToHistory(orderId, cart, total, data, 'Paystack');
 
   // Save pending order so delivery.html can pick it up after redirect
   sessionStorage.setItem('wlk_pending_order', JSON.stringify({
@@ -229,14 +235,69 @@ function _doPaystackPopupFallback(data, cart, total, orderId) {
   handler.openIframe();
 }
 
-// ─── Login banner ─────────────────────────────────────────────
+// ─── Customer memory (no login needed) ───────────────────────
 
-function dismissLoginBanner() {
-  var banner = document.getElementById('loginSuggestionBanner');
-  if (!banner) return;
-  banner.style.transition = 'opacity 0.3s';
-  banner.style.opacity = '0';
-  setTimeout(function() { banner.style.display = 'none'; }, 300);
+var CUSTOMER_KEY  = 'wlk_customer';
+var ORDER_HIST_KEY = 'wlk_order_history';
+
+function saveCustomerDetails(data) {
+  try { localStorage.setItem(CUSTOMER_KEY, JSON.stringify(data)); } catch(e) {}
+}
+
+function loadCustomerDetails() {
+  try { return JSON.parse(localStorage.getItem(CUSTOMER_KEY)) || null; } catch(e) { return null; }
+}
+
+function prefillForm() {
+  var saved = loadCustomerDetails();
+  if (!saved) return;
+  var fields = { custName: 'name', custEmail: 'email', custPhone: 'phone', custAddress: 'address' };
+  Object.keys(fields).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el && saved[fields[id]]) el.value = saved[fields[id]];
+  });
+}
+
+function saveOrderToHistory(orderId, cart, total, data, method) {
+  try {
+    var history = JSON.parse(localStorage.getItem(ORDER_HIST_KEY)) || [];
+    history.unshift({
+      orderId:  orderId,
+      date:     new Date().toLocaleDateString('en-NG', { day:'numeric', month:'short', year:'numeric' }),
+      items:    cart.map(function(i) { return i.name + ' ×' + i.qty; }).join(', '),
+      total:    total,
+      method:   method
+    });
+    // Keep last 10 orders
+    if (history.length > 10) history = history.slice(0, 10);
+    localStorage.setItem(ORDER_HIST_KEY, JSON.stringify(history));
+  } catch(e) {}
+}
+
+function renderPastOrders() {
+  try {
+    var history = JSON.parse(localStorage.getItem(ORDER_HIST_KEY)) || [];
+    if (history.length === 0) return;
+    var section = document.getElementById('pastOrdersSection');
+    var list    = document.getElementById('pastOrdersList');
+    if (!section || !list) return;
+
+    list.innerHTML = history.map(function(o) {
+      return '<div class="past-order-item">'
+        + '<div class="past-order-item__header">'
+        +   '<span class="past-order-item__id">' + o.orderId + '</span>'
+        +   '<span class="past-order-item__date">' + o.date + '</span>'
+        + '</div>'
+        + '<div class="past-order-item__products">' + o.items + '</div>'
+        + '<div class="past-order-item__footer">'
+        +   '<span class="past-order-item__total">' + WLKCart.formatPrice(o.total) + '</span>'
+        +   '<span class="past-order-item__method">' + o.method + '</span>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    section.style.display = 'block';
+  } catch(e) {}
 }
 
 // ─── Init ─────────────────────────────────────────────────────
@@ -247,14 +308,6 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
   renderOrderSummary();
-  setTimeout(function() {
-    var banner = document.getElementById('loginSuggestionBanner');
-    if (banner) {
-      banner.style.display = 'block';
-      setTimeout(function() {
-        banner.style.opacity = '1';
-        banner.style.transform = 'translateY(0)';
-      }, 50);
-    }
-  }, 600);
+  prefillForm();
+  renderPastOrders();
 });
