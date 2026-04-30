@@ -1,18 +1,28 @@
-// WLK Checkout v4 — Uses Paystack redirect (not popup)
-// Popup method blocked by GitHub Pages CSP — redirect is more reliable everywhere
+// WLK Checkout v5 — Paystack via Supabase Edge Function
+// Secret key lives in Supabase Edge Function, never in this file.
 
+// ─── Config ───────────────────────────────────────────────────
 var PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
-var WLK_WHATSAPP = '447424985544';
+var WLK_WHATSAPP        = '447424985544';
+var SUPABASE_URL        = 'https://kulibehbzfsexgigvdyd.supabase.co';
+var SUPABASE_ANON_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1bGliZWhiemZzZXhnaWd2ZHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNDk3MzMsImV4cCI6MjA5MjkyNTczM30.sOjEoCyIwlRsCjk2x6FenAwH4P7iR1Kqo6-p0L3lir0';
+
+var PAYSTACK_INIT_URL = SUPABASE_URL + '/functions/v1/paystack-init';
+
 var selectedPayment = 'paystack';
 
 // ─── UI helpers ───────────────────────────────────────────────
 
 function selectPayment(method) {
   selectedPayment = method;
-  document.getElementById('optPaystack').classList.toggle('selected', method === 'paystack');
-  document.getElementById('optWhatsapp').classList.toggle('selected', method === 'whatsapp');
-  document.getElementById('optPaystack').querySelector('.payment-option__check').textContent = method === 'paystack' ? '✓' : '';
-  document.getElementById('optWhatsapp').querySelector('.payment-option__check').textContent = method === 'whatsapp' ? '✓' : '';
+
+  ['paystack', 'whatsapp'].forEach(function(m) {
+    var el = document.getElementById('opt-' + m);
+    if (!el) return;
+    el.classList.toggle('selected', m === method);
+    el.querySelector('.payment-option__check').textContent = m === method ? '✓' : '';
+  });
+
   var btn = document.getElementById('submitBtn');
   if (method === 'whatsapp') {
     btn.textContent = 'Order via WhatsApp →';
@@ -41,25 +51,27 @@ function showToast(msg) {
 }
 
 function generateOrderId() {
-  return 'WLK-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2,4).toUpperCase();
+  return 'WLK-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
 }
 
 // ─── Order summary ────────────────────────────────────────────
 
 function renderOrderSummary() {
   var cart = WLKCart.getCart();
-  var el = document.getElementById('checkoutOrderItems');
+  var el   = document.getElementById('checkoutOrderItems');
   if (!el) return;
+
   if (cart.length === 0) {
     el.innerHTML = '<p style="color:#999;font-size:13px">No items. <a href="index.html" style="color:#c9a84c;text-decoration:underline">Go back</a></p>';
     return;
   }
+
   var html = cart.map(function(item) {
-    return '<div class="checkout-order-item">' +
-      '<span class="checkout-order-item__name">' + item.name + '</span>' +
-      '<span class="checkout-order-item__qty">\xd7' + item.qty + '</span>' +
-      '<span class="checkout-order-item__price">' + WLKCart.formatPrice(item.price * item.qty) + '</span>' +
-      '</div>';
+    return '<div class="checkout-order-item">'
+      + '<span class="checkout-order-item__name">' + item.name + '</span>'
+      + '<span class="checkout-order-item__qty">\xd7' + item.qty + '</span>'
+      + '<span class="checkout-order-item__price">' + WLKCart.formatPrice(item.price * item.qty) + '</span>'
+      + '</div>';
   }).join('');
   html += '<div class="checkout-order-total"><span>Total</span><span>' + WLKCart.formatPrice(WLKCart.getTotal()) + '</span></div>';
   el.innerHTML = html;
@@ -89,13 +101,15 @@ function validateForm(data) {
 function handleCheckout() {
   var data = getFormData();
   if (!validateForm(data)) return;
+
   var btn = document.getElementById('submitBtn');
   btn.disabled = true;
   btn.textContent = 'Processing\u2026';
+
   if (selectedPayment === 'whatsapp') {
     _doWhatsApp(data);
   } else {
-    _doPaystackRedirect(data);
+    _doPaystack(data);
   }
 }
 
@@ -132,67 +146,54 @@ function _doWhatsApp(data) {
   window.location.href = 'success.html?method=whatsapp&order=' + orderId;
 }
 
-// ─── Paystack REDIRECT flow ───────────────────────────────────
-// Uses Paystack's REST API to initialize a transaction, then redirects
-// the user to Paystack's hosted payment page.
-// This completely bypasses iframe/popup CSP restrictions.
-// After payment, Paystack redirects back to delivery.html?reference=xxx
+// ─── Paystack flow (via Supabase Edge Function) ───────────────
 
-function _doPaystackRedirect(data) {
-  var cart    = WLKCart.getCart();
-  var total   = WLKCart.getTotal();
-  var orderId = generateOrderId();
+function _doPaystack(data) {
+  var cart        = WLKCart.getCart();
+  var total       = WLKCart.getTotal();
+  var orderId     = generateOrderId();
   var callbackUrl = window.location.origin + '/delivery.html?order=' + orderId;
 
-  // Save pending order data for delivery.html to pick up after redirect
+  // Save pending order so delivery.html can pick it up after redirect
   sessionStorage.setItem('wlk_pending_order', JSON.stringify({
     orderId: orderId, cart: cart, total: total,
     name: data.name, email: data.email,
     phone: data.phone, address: data.address
   }));
 
-  // Call Paystack Initialize Transaction API
-  fetch('https://api.paystack.co/transaction/initialize', {
+  fetch(PAYSTACK_INIT_URL, {
     method: 'POST',
     headers: {
-      'Authorization': 'Bearer ' + PAYSTACK_PUBLIC_KEY,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
     },
     body: JSON.stringify({
-      email:        data.email,
-      amount:       total * 100,
-      currency:     'NGN',
-      reference:    orderId,
-      callback_url: callbackUrl,
-      metadata: {
-        custom_fields: [
-          { display_name: 'Customer Name', variable_name: 'customer_name', value: data.name },
-          { display_name: 'Phone',         variable_name: 'phone',         value: data.phone },
-          { display_name: 'Address',       variable_name: 'address',       value: data.address }
-        ]
-      }
+      email:       data.email,
+      amount:      total,
+      orderId:     orderId,
+      name:        data.name,
+      phone:       data.phone,
+      address:     data.address,
+      callbackUrl: callbackUrl
     })
   })
   .then(function(res) { return res.json(); })
   .then(function(result) {
-    if (result.status && result.data && result.data.authorization_url) {
-      // Redirect to Paystack hosted page — no popup, no iframe, no CSP issues
-      window.location.href = result.data.authorization_url;
+    if (result.status && result.authorization_url) {
+      window.location.href = result.authorization_url;
     } else {
-      showToast('Could not start payment. Please try WhatsApp instead.');
+      showToast(result.error || 'Could not start payment. Please try WhatsApp.');
       resetBtn();
-      console.error('Paystack init failed:', result);
     }
   })
   .catch(function(err) {
-    // If API call fails (CORS on some setups), fall back to inline popup
-    console.warn('Redirect init failed, trying popup fallback:', err);
+    console.error('Paystack edge function error:', err);
+    // Fall back to inline popup using the public key
     _doPaystackPopupFallback(data, cart, total, orderId);
   });
 }
 
-// ─── Paystack popup fallback (if redirect API is blocked) ────
-// Plain synchronous callback — no async/await
+// ─── Paystack popup fallback (if edge function unreachable) ──
 
 function _doPaystackPopupFallback(data, cart, total, orderId) {
   if (typeof PaystackPop === 'undefined') {
@@ -210,9 +211,9 @@ function _doPaystackPopupFallback(data, cart, total, orderId) {
     label:    data.name,
     metadata: {
       custom_fields: [
-        { display_name: 'Customer Name', variable_name: 'customer_name', value: data.name },
-        { display_name: 'Phone',         variable_name: 'phone',         value: data.phone },
-        { display_name: 'Address',       variable_name: 'address',       value: data.address }
+        { display_name: 'Customer Name',   variable_name: 'customer_name', value: data.name    },
+        { display_name: 'Phone',           variable_name: 'phone',         value: data.phone   },
+        { display_name: 'Address',         variable_name: 'address',       value: data.address }
       ]
     },
     callback: function(response) {
