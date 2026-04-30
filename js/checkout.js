@@ -4,8 +4,7 @@
 // ─── Config ───────────────────────────────────────────────────
 var PAYSTACK_PUBLIC_KEY = 'pk_live_a5f0f030c3f7482268e7d5d6ffbb852774f89b4b';
 var WLK_WHATSAPP        = '447424985544';
-var SUPABASE_URL        = 'https://kulibehbzfsexgigvdyd.supabase.co';
-var SUPABASE_ANON_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1bGliZWhiemZzZXhnaWd2ZHlkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNDk3MzMsImV4cCI6MjA5MjkyNTczM30.sOjEoCyIwlRsCjk2x6FenAwH4P7iR1Kqo6-p0L3lir0';
+// SUPABASE_URL and SUPABASE_ANON_KEY are already declared in supabase.js
 
 var PAYSTACK_INIT_URL = SUPABASE_URL + '/functions/v1/paystack-init';
 
