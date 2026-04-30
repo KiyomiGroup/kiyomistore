@@ -74,66 +74,74 @@
 
       <div class="products-grid-2">
 
-      <!-- 1 · Lite Cleanse 350ml -->
-      <article class="product-block reveal" aria-label="WLK Lite Cleanse">
-        <div class="product-block__img-wrap">
-          <img src="images/product-lite-1.jpg" alt="WLK Lite Cleanse 350ml bottle" class="product-block__img" loading="lazy">
-          <span class="product-block__badge">350ml</span>
+      <!-- PRODUCT DETAIL MODAL -->
+      <div class="pdp-overlay" id="pdpOverlay" onclick="closePDP()" aria-hidden="true"></div>
+      <div class="pdp-modal" id="pdpModal" role="dialog" aria-modal="true" aria-label="Product details">
+        <button class="pdp-modal__close" onclick="closePDP()" aria-label="Close">✕</button>
+        <div class="pdp-modal__img-wrap">
+          <img id="pdpImg" src="" alt="" class="pdp-modal__img">
+          <span class="pdp-modal__badge" id="pdpBadge"></span>
         </div>
-        <div class="product-block__body">
-          <div class="product-block__row">
-            <h2 class="product-block__name">WLK Lite Cleanse</h2>
-            <span class="product-block__price">₦12,000</span>
-          </div>
-          <p class="product-block__desc">Starter detox. Gentle herbal fat burn for first-time cleansers.</p>
-          <button class="btn-add" onclick="addToCart('lite','WLK Lite Cleanse (350ml)',12000,'images/product-lite-1.jpg')">Add to Cart</button>
+        <div class="pdp-modal__body">
+          <p class="pdp-modal__label" id="pdpLabel"></p>
+          <h2 class="pdp-modal__name" id="pdpName"></h2>
+          <p class="pdp-modal__price" id="pdpPrice"></p>
+          <p class="pdp-modal__tagline" id="pdpTagline"></p>
+          <p class="pdp-modal__desc" id="pdpDesc"></p>
+          <div class="pdp-modal__benefits" id="pdpBenefits"></div>
+          <div class="pdp-modal__includes" id="pdpIncludes"></div>
+          <div class="pdp-modal__best" id="pdpBest"></div>
+          <div class="pdp-modal__warning" id="pdpWarning"></div>
+          <button class="pdp-modal__cta" id="pdpCta">Add to Cart</button>
         </div>
-      </article>
+      </div>
+
+      <!-- 1 · Lite Cleanse 350ml -->\n      <article class=\"product-block reveal\" aria-label=\"WLK Lite Cleanse\">\n        <div class=\"product-block__img-wrap\" onclick=\"openPDP('lite')\" style=\"cursor:pointer\">\n          <img src=\"images/product-lite-1.jpg\" alt=\"WLK Lite Cleanse 350ml bottle\" class=\"product-block__img\" loading=\"lazy\">\n          <span class=\"product-block__badge\">350ml</span>\n        </div>\n        <div class=\"product-block__body\">\n          <div class=\"product-block__row\" onclick=\"openPDP('lite')\" style=\"cursor:pointer\">\n            <h2 class=\"product-block__name\">WLK Lite Cleanse</h2>\n            <span class=\"product-block__price\">₦12,000</span>\n          </div>\n          <p class=\"product-block__desc\" onclick=\"openPDP('lite')\" style=\"cursor:pointer\">Starter detox. Gentle herbal fat burn for first-time cleansers.</p>\n          <button class=\"btn-add\" onclick=\"addToCart('lite','WLK Lite Cleanse (350ml)',12000,'images/product-lite-1.jpg')\">Add to Cart</button>\n        </div>\n      </article>
 
       <!-- 2 · Lite Cleanse Plus 350ml + detox -->
       <article class="product-block reveal reveal-d1" aria-label="WLK Lite Cleanse Plus">
-        <div class="product-block__img-wrap">
+        <div class="product-block__img-wrap" onclick="openPDP('lite-plus')" style="cursor:pointer">
           <img src="images/product-lite-plus-1.jpg" alt="WLK Lite Cleanse Plus — 350ml bottle with detox pill" class="product-block__img" loading="lazy">
           <span class="product-block__badge product-block__badge--gold">350ml + Detox</span>
         </div>
         <div class="product-block__body">
-          <div class="product-block__row">
+          <div class="product-block__row" onclick="openPDP('lite-plus')" style="cursor:pointer">
             <h2 class="product-block__name">WLK Lite Cleanse Plus</h2>
             <span class="product-block__price">₦18,000</span>
           </div>
-          <p class="product-block__desc">Lite Cleanse combined with Deep Cleanse Capsules for faster results.</p>
+          <p class="product-block__desc" onclick="openPDP('lite-plus')" style="cursor:pointer">Lite Cleanse combined with Deep Cleanse Capsules for faster results.</p>
           <button class="btn-add" onclick="addToCart('lite-plus','WLK Lite Cleanse Plus',18000,'images/product-lite-plus-1.jpg')">Add to Cart</button>
         </div>
       </article>
 
       <!-- 3 · Core Cleanse 500ml -->
       <article class="product-block reveal" aria-label="WLK Core Cleanse">
-        <div class="product-block__img-wrap">
+        <div class="product-block__img-wrap" onclick="openPDP('core')" style="cursor:pointer">
           <img src="images/product-core-1.jpg" alt="WLK Core Cleanse 500ml bottle" class="product-block__img" loading="lazy">
           <span class="product-block__badge">500ml</span>
         </div>
         <div class="product-block__body">
-          <div class="product-block__row">
+          <div class="product-block__row" onclick="openPDP('core')" style="cursor:pointer">
             <h2 class="product-block__name">WLK Core Cleanse</h2>
             <span class="product-block__price">₦15,000</span>
           </div>
-          <p class="product-block__desc">Full strength. Maximum herbal detox power for serious results.</p>
+          <p class="product-block__desc" onclick="openPDP('core')" style="cursor:pointer">Full strength. Maximum herbal detox power for serious results.</p>
           <button class="btn-add" onclick="addToCart('core','WLK Core Cleanse (500ml)',15000,'images/product-core-1.jpg')">Add to Cart</button>
         </div>
       </article>
 
       <!-- 4 · Core Cleanse Plus 500ml + detox -->
       <article class="product-block reveal reveal-d1" aria-label="WLK Core Cleanse Plus">
-        <div class="product-block__img-wrap">
+        <div class="product-block__img-wrap" onclick="openPDP('core-plus')" style="cursor:pointer">
           <img src="images/product-core-plus-1.jpg" alt="WLK Core Cleanse Plus — 500ml bottle with detox pill" class="product-block__img" loading="lazy">
           <span class="product-block__badge product-block__badge--gold">500ml + Detox</span>
         </div>
         <div class="product-block__body">
-          <div class="product-block__row">
+          <div class="product-block__row" onclick="openPDP('core-plus')" style="cursor:pointer">
             <h2 class="product-block__name">WLK Core Cleanse Plus</h2>
             <span class="product-block__price">₦20,000</span>
           </div>
-          <p class="product-block__desc">Core Cleanse paired with Deep Cleanse Capsules — the complete combo.</p>
+          <p class="product-block__desc" onclick="openPDP('core-plus')" style="cursor:pointer">Core Cleanse paired with Deep Cleanse Capsules — the complete combo.</p>
           <button class="btn-add" onclick="addToCart('core-plus','WLK Core Cleanse Plus',20000,'images/product-core-plus-1.jpg')">Add to Cart</button>
         </div>
       </article>
@@ -158,16 +166,16 @@
       </div>
 
       <article class="product-block product-block--addon reveal" aria-label="WLK Deep Cleanse Capsules">
-        <div class="product-block__img-wrap">
+        <div class="product-block__img-wrap" onclick="openPDP('capsules')" style="cursor:pointer">
           <img src="images/product-capsule-1.jpg" alt="WLK Deep Cleanse detox pill cup" class="product-block__img" loading="lazy">
           <span class="product-block__badge product-block__badge--gold">Detox Pill</span>
         </div>
         <div class="product-block__body">
-          <div class="product-block__row">
+          <div class="product-block__row" onclick="openPDP('capsules')" style="cursor:pointer">
             <h2 class="product-block__name">Deep Cleanse Capsules</h2>
             <span class="product-block__price">₦6,000</span>
           </div>
-          <p class="product-block__desc">Supercharge any cleanse. Promotes purging and supports nausea. Add to any order.</p>
+          <p class="product-block__desc" onclick="openPDP('capsules')" style="cursor:pointer">Supercharge any cleanse. Promotes purging and supports nausea. Add to any order.</p>
           <button class="btn-add" onclick="addToCart('capsules','WLK Deep Cleanse Capsules',6000,'images/product-capsule-1.jpg')">Add to Cart</button>
         </div>
       </article>
@@ -192,32 +200,32 @@
 
         <!-- 5 · Balance Kit -->
         <article class="product-block reveal" aria-label="WLK Balance Kit">
-          <div class="product-block__img-wrap">
+          <div class="product-block__img-wrap" onclick="openPDP('balance')" style="cursor:pointer">
             <img src="images/product-bundle-1.jpg" alt="WLK Balance Kit — 500ml and 350ml bottles" class="product-block__img" loading="lazy">
             <span class="product-block__badge product-block__badge--outline">500ml + 350ml</span>
           </div>
           <div class="product-block__body">
-            <div class="product-block__row">
+            <div class="product-block__row" onclick="openPDP('balance')" style="cursor:pointer">
               <h2 class="product-block__name">Balance Kit</h2>
               <span class="product-block__price">₦25,000</span>
             </div>
-            <p class="product-block__desc">1 × Core + 1 × Lite.</p>
+            <p class="product-block__desc" onclick="openPDP('balance')" style="cursor:pointer">1 × Core + 1 × Lite.</p>
             <button class="btn-add" onclick="addToCart('balance','WLK Balance Kit',25000,'images/product-bundle-1.jpg')">Add to Cart</button>
           </div>
         </article>
 
         <!-- 6 · Balance Kit Plus -->
         <article class="product-block reveal reveal-d2" aria-label="WLK Balance Kit Plus">
-          <div class="product-block__img-wrap">
+          <div class="product-block__img-wrap" onclick="openPDP('balance-plus')" style="cursor:pointer">
             <img src="images/product-bundle-2.jpg" alt="WLK Balance Kit Plus — bottles with detox" class="product-block__img" loading="lazy">
             <span class="product-block__badge product-block__badge--gold">+ Detox</span>
           </div>
           <div class="product-block__body">
-            <div class="product-block__row">
+            <div class="product-block__row" onclick="openPDP('balance-plus')" style="cursor:pointer">
               <h2 class="product-block__name">Balance Kit Plus</h2>
               <span class="product-block__price">₦30,000</span>
             </div>
-            <p class="product-block__desc">500ml + 350ml + Detox pill.</p>
+            <p class="product-block__desc" onclick="openPDP('balance-plus')" style="cursor:pointer">500ml + 350ml + Detox pill.</p>
             <button class="btn-add" onclick="addToCart('balance-plus','WLK Balance Kit Plus',30000,'images/product-bundle-2.jpg')">Add to Cart</button>
           </div>
         </article>
@@ -233,11 +241,11 @@
 
       <article class="product-block product-block--flagship reveal" aria-label="WLK 7-Day Reset Program" data-id="reset" data-name="WLK 7-Day Reset Program" data-price="42000" data-img="images/product-flagship-1.jpg">
         <span class="flagship-label" aria-hidden="true">Flagship</span>
-        <div class="product-block__img-wrap">
+        <div class="product-block__img-wrap" onclick="openPDP('reset')" style="cursor:pointer">
           <img src="images/product-flagship-1.jpg" alt="WLK 7-Day Reset Program — complete kit" class="product-block__img" loading="lazy">
         </div>
         <div class="product-block__body">
-          <div class="product-block__row">
+          <div class="product-block__row" onclick="openPDP('reset')" style="cursor:pointer">
             <h2 class="product-block__name">WLK 7-Day Reset Program</h2>
             <span class="product-block__price">₦42,000</span>
           </div>
@@ -247,7 +255,7 @@
             <span class="flagship-tag">Detox Pill</span>
             <span class="flagship-tag">7 Days</span>
           </div>
-          <p class="product-block__desc">Our most complete transformation. A full 7-day herbal protocol — everything you need for a serious cleanse and lasting reset.</p>
+          <p class="product-block__desc" onclick="openPDP('reset')" style="cursor:pointer">Our most complete transformation. A full 7-day herbal protocol — everything you need for a serious cleanse and lasting reset.</p>
           <button class="btn-add" onclick="addToCart('reset','WLK 7-Day Reset Program',42000,'images/product-flagship-1.jpg')">Add to Cart</button>
         </div>
       </article>
@@ -365,5 +373,159 @@
     /* Initial sync */
     document.addEventListener('DOMContentLoaded', syncBadges);
   </script>
+  <script>
+  // ── PRODUCT DETAIL POPUP ──────────────────────────────────
+  var WLK_PRODUCTS = {
+    'lite': {
+      id: 'lite', name: 'WLK Lite Cleanse', price: 12000,
+      img: 'images/product-lite-1.jpg', badge: '350ml',
+      label: 'Single · 350ml',
+      tagline: 'Looking for something light to get started?',
+      desc: 'The WLK Lite Cleanse (350ml) is a gentle daily cleanse that helps reduce bloating, improve digestion, and keep your body feeling fresh and light.',
+      benefits: ['Reduces bloating', 'Supports digestion', 'Keeps your stomach feeling flat'],
+      includes: [],
+      best: 'Daily maintenance or beginners starting their weight loss journey.',
+      hasDetox: false
+    },
+    'lite-plus': {
+      id: 'lite-plus', name: 'WLK Lite Cleanse Plus', price: 18000,
+      img: 'images/product-lite-plus-1.jpg', badge: '350ml + Detox',
+      label: 'Single · 350ml + Detox',
+      tagline: 'Small but powerful combo.',
+      desc: 'The WLK Lite Cleanse Plus combines your daily cleanse with detox support to help flush your system while keeping your stomach light and active.',
+      benefits: ['Flushes out toxins', 'Reduces bloating faster', 'Supports weight loss naturally'],
+      includes: ['350ml Lite Cleanse', 'Detox'],
+      best: 'Anyone who wants quicker results from a light routine.',
+      hasDetox: true
+    },
+    'core': {
+      id: 'core', name: 'WLK Core Cleanse', price: 15000,
+      img: 'images/product-core-1.jpg', badge: '500ml',
+      label: 'Single · 500ml',
+      tagline: 'This is your stronger, more effective cleanse.',
+      desc: 'The WLK Core Cleanse (500ml) is designed to go deeper, helping your body reduce stubborn bloating and support visible weight loss over time.',
+      benefits: ['Belly fat reduction support', 'Better digestion', 'Less bloating, flatter tummy'],
+      includes: [],
+      best: 'People who want something stronger than the lite version.',
+      hasDetox: false
+    },
+    'core-plus': {
+      id: 'core-plus', name: 'WLK Core Cleanse Plus', price: 20000,
+      img: 'images/product-core-plus-1.jpg', badge: '500ml + Detox',
+      label: 'Single · 500ml + Detox',
+      tagline: 'This is where real results begin.',
+      desc: 'The WLK Core Cleanse Plus combines a powerful cleanse with detox support to help your body burn fat, flush toxins, and reduce waist size more effectively.',
+      benefits: ['Stronger fat-burning support', 'Faster bloating reduction', 'Helps control appetite'],
+      includes: ['500ml Core Cleanse', 'Detox'],
+      best: 'People ready to take weight loss seriously.',
+      hasDetox: true
+    },
+    'capsules': {
+      id: 'capsules', name: 'WLK Detox (Standalone)', price: 6000,
+      img: 'images/product-capsule-1.jpg', badge: 'Detox Pill',
+      label: 'Add-On · Detox',
+      tagline: 'Your body needs a reset sometimes.',
+      desc: 'The WLK Detox helps cleanse your system, remove waste buildup, and support a flatter, lighter stomach.',
+      benefits: ['Flushes out toxins', 'Reduces bloating', 'Supports digestion'],
+      includes: [],
+      best: 'Perfect add-on to any cleanse for better results.',
+      hasDetox: true
+    },
+    'balance': {
+      id: 'balance', name: 'WLK Balance Kit', price: 25000,
+      img: 'images/product-bundle-1.jpg', badge: '500ml + 350ml',
+      label: 'Combo Kit',
+      tagline: 'The perfect balance between light and strong.',
+      desc: 'The WLK Balance Kit combines both Lite and Core cleanse so your body gets a steady, effective weight loss support without being too harsh.',
+      benefits: ['Gradual, steady weight loss', 'Reduced bloating', 'Better digestion'],
+      includes: ['500ml Core Cleanse', '350ml Lite Cleanse'],
+      best: 'People who want a balanced, flexible routine.',
+      hasDetox: false
+    },
+    'balance-plus': {
+      id: 'balance-plus', name: 'WLK Balance Kit Plus', price: 30000,
+      img: 'images/product-bundle-2.jpg', badge: '+ Detox',
+      label: 'Combo Kit · + Detox',
+      tagline: 'Balanced + boosted results.',
+      desc: 'The WLK Balance Kit Plus adds detox to your routine, helping your body cleanse deeper while supporting faster fat loss and a flatter tummy.',
+      benefits: ['Full body cleanse', 'Reduced cravings', 'Faster visible results'],
+      includes: ['500ml Core Cleanse', '350ml Lite Cleanse', 'Detox'],
+      best: 'People who want stronger results without going extreme.',
+      hasDetox: true
+    },
+    'reset': {
+      id: 'reset', name: 'WLK 7-Day Reset Program', price: 42000,
+      img: 'images/product-flagship-1.jpg', badge: '7-Day Program',
+      label: 'Flagship Program',
+      tagline: 'This is your full body reset in 7 days.',
+      desc: 'The WLK 7-Day Reset Program is designed to help you detox, reduce bloating, and kickstart real weight loss fast. Perfect if you want to feel lighter and see changes quickly.',
+      benefits: ['Flatter tummy within days', 'Reduced bloating', 'Noticeable weight loss start', 'Cleaner, lighter feeling body'],
+      includes: ['2 × 500ml Core Cleanse', '1 × 350ml Lite Cleanse', 'Detox'],
+      best: 'Anyone who wants a fast and effective reset.',
+      hasDetox: true
+    }
+  };
+
+  var DETOX_WARNING = '⚠️ Products containing Detox should be used with a minimum 14-day interval between courses.';
+
+  function openPDP(id) {
+    var p = WLK_PRODUCTS[id];
+    if (!p) return;
+
+    document.getElementById('pdpImg').src = p.img;
+    document.getElementById('pdpImg').alt = p.name;
+    document.getElementById('pdpBadge').textContent = p.badge;
+    document.getElementById('pdpLabel').textContent = p.label;
+    document.getElementById('pdpName').textContent = p.name;
+    document.getElementById('pdpPrice').textContent = '₦' + p.price.toLocaleString('en-NG');
+    document.getElementById('pdpTagline').textContent = p.tagline;
+    document.getElementById('pdpDesc').textContent = p.desc;
+
+    var benefitsEl = document.getElementById('pdpBenefits');
+    if (p.benefits.length) {
+      benefitsEl.innerHTML = '<p class="pdp-section-label">Benefits</p>'
+        + p.benefits.map(function(b) { return '<span class="pdp-pill">✓ ' + b + '</span>'; }).join('');
+      benefitsEl.style.display = '';
+    } else { benefitsEl.style.display = 'none'; }
+
+    var includesEl = document.getElementById('pdpIncludes');
+    if (p.includes.length) {
+      includesEl.innerHTML = '<p class="pdp-section-label">Includes</p>'
+        + p.includes.map(function(i) { return '<span class="pdp-pill pdp-pill--outline">📦 ' + i + '</span>'; }).join('');
+      includesEl.style.display = '';
+    } else { includesEl.style.display = 'none'; }
+
+    var bestEl = document.getElementById('pdpBest');
+    bestEl.innerHTML = '<span>💡</span> <em>Best for: ' + p.best + '</em>';
+
+    var warningEl = document.getElementById('pdpWarning');
+    if (p.hasDetox) {
+      warningEl.textContent = DETOX_WARNING;
+      warningEl.style.display = '';
+    } else { warningEl.style.display = 'none'; }
+
+    var cta = document.getElementById('pdpCta');
+    cta.onclick = function() {
+      var imgMap = { lite: 'images/product-lite-1.jpg', 'lite-plus': 'images/product-lite-plus-1.jpg', core: 'images/product-core-1.jpg', 'core-plus': 'images/product-core-plus-1.jpg', capsules: 'images/product-capsule-1.jpg', balance: 'images/product-bundle-1.jpg', 'balance-plus': 'images/product-bundle-2.jpg', reset: 'images/product-flagship-1.jpg' };
+      addToCart(p.id, p.name, p.price, imgMap[p.id]);
+      closePDP();
+    };
+
+    document.getElementById('pdpOverlay').classList.add('open');
+    document.getElementById('pdpModal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePDP() {
+    document.getElementById('pdpOverlay').classList.remove('open');
+    document.getElementById('pdpModal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePDP();
+  });
+  </script>
+
 </body>
 </html>
